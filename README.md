@@ -1,7 +1,13 @@
-# ChatGPT.nvim
+# ChatGPT.nvim Fork
+
 
 ![GitHub Workflow Status](http://img.shields.io/github/actions/workflow/status/jackMort/ChatGPT.nvim/default.yml?branch=main&style=for-the-badge)
 ![Lua](https://img.shields.io/badge/Made%20with%20Lua-blueviolet.svg?style=for-the-badge&logo=lua)
+
+
+This is the fork of the original [ChatGPT.nvim](https://github.com/jackMort/ChatGPT.nvim) plugin. 
+I forked it to make it work with ollama
+currently `ChatGPT` and `ChatGPTActAs` commands are working with `mistral:instruct` model
 
 `ChatGPT` is a Neovim plugin that allows you to effortlessly utilize the OpenAI
 ChatGPT API, empowering you to generate natural language responses from
