@@ -516,16 +516,10 @@ function Chat:toMessages()
     elseif msg.type == ANSWER then
       role = "assistant"
     end
-    local content = {}
-    if self.params.model == "gpt-4-vision-preview" then
-      for _, line in ipairs(msg.lines) do
-        table.insert(content, createContent(line))
-      end
-    else
-      content = msg.text
-    end
+    content = msg.text
     table.insert(messages, { role = role, content = content })
   end
+
   return messages
 end
 
