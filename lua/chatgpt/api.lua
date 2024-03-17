@@ -101,31 +101,13 @@ function Api.edits(custom_params, cb)
 end
 
 function Api.make_call(url, params, cb)
-  TMP_MSG_FILENAME = os.tmpname()
-  local f = io.open(TMP_MSG_FILENAME, "w+")
-  if f == nil then
-    vim.notify("Cannot open temporary message file: " .. TMP_MSG_FILENAME, vim.log.levels.ERROR)
-    return
-  end
-  f:write(vim.fn.json_encode(params))
-  f:close()
-
   local args = {
     url,
     "-H",
     "Content-Type: application/json",
-    "-H",
-    Api.AUTHORIZATION_HEADER,
     "-d",
-    "@" .. TMP_MSG_FILENAME,
+    vim.json.encode(params),
   }
-
-  local extra_curl_params = Config.options.extra_curl_params
-  if extra_curl_params ~= nil then
-    for _, param in ipairs(extra_curl_params) do
-      table.insert(args, param)
-    end
-  end
 
   Api.job = job
     :new({
@@ -139,35 +121,27 @@ function Api.make_call(url, params, cb)
 end
 
 Api.handle_response = vim.schedule_wrap(function(response, exit_code, cb)
-  os.remove(TMP_MSG_FILENAME)
   if exit_code ~= 0 then
     vim.notify("An Error Occurred ...", vim.log.levels.ERROR)
     cb("ERROR: API Error")
   end
 
-  local result = table.concat(response:result(), "\n")
+  local result = response:result()[1]
   local json = vim.fn.json_decode(result)
   if json == nil then
     cb("No Response.")
   elseif json.error then
     cb("// API ERROR: " .. json.error.message)
   else
-    local message = json.choices[1].message
+    local message = json.response
     if message ~= nil then
-      local message_response
-      local first_message = json.choices[1].message
-      if first_message.function_call then
-        message_response = vim.fn.json_decode(first_message.function_call.arguments)
-      else
-        message_response = first_message.content
-      end
-      if (type(message_response) == "string" and message_response ~= "") or type(message_response) == "table" then
-        cb(message_response, json.usage)
+      if (type(message) == "string" and message ~= "") or type(messagee) == "table" then
+        cb(message, json.usage)
       else
         cb("...")
       end
     else
-      local response_text = json.choices[1].text
+      local response_text = json.response
       if type(response_text) == "string" and response_text ~= "" then
         cb(response_text, json.usage)
       else
@@ -296,7 +270,7 @@ end
 function Api.setup()
   loadOptionalConfig("OPENAI_API_HOST", "OPENAI_API_HOST", "api_host_cmd", function(host)
     Api.OPENAI_API_HOST = host
-    Api.COMPLETIONS_URL = ensureUrlProtocol(Api.OPENAI_API_HOST .. "/v1/completions")
+    Api.COMPLETIONS_URL = ensureUrlProtocol(Api.OPENAI_API_HOST .. "/api/generate")
     Api.CHAT_COMPLETIONS_URL = ensureUrlProtocol(Api.OPENAI_API_HOST .. "/v1/chat/completions")
     Api.EDITS_URL = ensureUrlProtocol(Api.OPENAI_API_HOST .. "/v1/edits")
   end, "api.openai.com")

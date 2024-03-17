@@ -52,11 +52,9 @@ M.complete = function()
   set_loading(true)
 
   Api.completions({
-    model = "mistral:instruct",
+    model = "codellama:7b-code",
     prompt = prefix,
-    suffix = suffix,
-    max_tokens = 2048,
-    presence_penalty = 0.6,
+    stream = false,
   }, function(answer, usage)
     set_loading(false)
     local Popup = require("nui.popup")
