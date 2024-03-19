@@ -6,4 +6,5 @@ I forked it to make it work with ollama
 ### currently working command
 - `ChatGPT` and `ChatGPTActAs` commands are working with `mistral:instruct` model
 - `ChatGPTCompleteCode` command is working with `codellama:7b-code` model
+- `ChatGPTRun add_tests` command is working with `codellama:7b-code` model
 

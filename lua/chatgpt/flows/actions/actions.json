@@ -18,7 +18,7 @@
       "template": "Correct this to standard {{lang}}:\n\n{{input}}",
       "strategy": "replace",
       "params": {
-        "model": "mistral:instruct",
+        "model": "mistral:instruct"
       }
     },
     "args": {
@@ -78,10 +78,7 @@
       "template": "Implement tests for the following code.\n\nCode:\n```{{filetype}}\n{{input}}\n```\n\nTests:\n```{{filetype}}",
       "strategy": "append",
       "params": {
-        "model": "mistral:instruct",
-        "stop": [
-          "```"
-        ]
+        "model": "codellama:7b-code"
       }
     }
   },
@@ -104,7 +101,7 @@
       "template": "Summarize the following text.\n\nText:\n\"\"\"\n{{input}}\n\"\"\"\n\nSummary:",
       "strategy": "edit",
       "params": {
-        "model": "mistral:instruct",
+        "model": "mistral:instruct"
       }
     }
   },

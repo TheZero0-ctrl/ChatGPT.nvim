@@ -80,6 +80,9 @@ function ChatAction:on_result(answer, usage)
     self:set_loading(false)
 
     local bufnr = self:get_bufnr()
+    if type(answer) == "table" then
+      answer = answer.content
+    end
     if self.strategy == STRATEGY_PREPEND then
       answer = answer .. "\n" .. self:get_selected_text()
     elseif self.strategy == STRATEGY_APPEND then
